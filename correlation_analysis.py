@@ -70,6 +70,6 @@ def task_3():
         print(f"{feature1} <-> {feature2}: {corr:.3f}")
 
 
-task_1()
-task_2()
+#task_1()
+#task_2()
 #task_3()
