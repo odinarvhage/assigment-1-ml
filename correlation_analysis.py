@@ -31,6 +31,23 @@ def task_1():
     plt.title(f"Top 15 correlation coefficients for {target}")
     plt.show()
 
+def task_2():
+    correlation_matrix = df.corr(numeric_only=True)
+
+    target_correlation = correlation_matrix[target].drop(target) #drops the target
+
+    most_correlated_feature = target_correlation.idxmax() #most correlation
+    highest_correlation = target_correlation.max()
+
+    least_correlated_feature = target_correlation.idxmin() #least correlation
+    lowest_correlation = target_correlation.min()
+
+    print(f"Most correlated feature with {target}:")
+    print(f"{most_correlated_feature} ({highest_correlation:.4f})")
+
+    print(f"\nLeast correlated feature with {target}:")
+    print(f"{least_correlated_feature} ({lowest_correlation:.4f})")
+
 def task_3():
     corr_matrix = df.corr(numeric_only=True)
     high_corr_pairs = []
@@ -53,5 +70,6 @@ def task_3():
         print(f"{feature1} <-> {feature2}: {corr:.3f}")
 
 
-#task_1()
+task_1()
+task_2()
 #task_3()
