@@ -51,5 +51,14 @@ def train_test_split(feature, target):
         print(f"RMSE: {rmse:.4f}")
         print(f"R²:   {r2:.4f}")
 
+    print("Mean and variance")
+    print(f"MSE mean     : {np.mean(mse_scores):.4f}")
+    print(f"MSE variance : {np.var(mse_scores):.4f}")
+    print(f"RMSE mean     : {np.mean(rmse_scores):.4f}")
+    print(f"RMSE variance : {np.var(rmse_scores):.4f}")
+    print(f"R² mean     : {np.mean(r2_scores):.4f}")
+    print(f"R² variance : {np.var(r2_scores):.4f}")
+
+
 #train_test_split("wtd_std_ThermalConductivity", "critical_temp") #strong predictor
 #train_test_split("wtd_mean_Valence","critical_temp") #weak predictor
