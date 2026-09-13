@@ -5,7 +5,7 @@ from sklearn.linear_model import RidgeCV
 from sklearn.model_selection import KFold
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, r2_score
-
+from sklearn.ensemble import RandomForestRegressor
 df = pd.read_csv("train.csv")
 
 def ridge(data):
@@ -160,5 +160,51 @@ def lasso(data):
 
     print(f"\nMean Alpha: {np.mean(best_alphas):.6f}")
 
-ridge(df)
-lasso(df)
+
+def random_forest(data, target):
+    X = data.drop(columns=[target])
+    y = data[target]
+    kf = KFold(n_splits=5, shuffle=True, random_state=42)
+    mse_scores = []
+    rmse_scores = []
+    r2_scores = []
+    for fold, (train_idx, test_idx) in enumerate(kf.split(X), start=1):
+        X_train = X.iloc[train_idx]
+        X_test = X.iloc[test_idx]
+
+        y_train = y.iloc[train_idx]
+        y_test = y.iloc[test_idx]
+
+        # Train model
+        rf = RandomForestRegressor(
+            n_estimators=100,
+            random_state=42,
+            n_jobs=-1
+        )
+
+        rf.fit(X_train, y_train)
+        y_pred = rf.predict(X_test)
+        mse = mean_squared_error(y_test, y_pred)
+        rmse = np.sqrt(mse)
+        r2 = r2_score(y_test, y_pred)
+
+        mse_scores.append(mse)
+        rmse_scores.append(rmse)
+        r2_scores.append(r2)
+
+        print(f"\nFold {fold}")
+        print(f"MSE  = {mse:.4f}")
+        print(f"RMSE = {rmse:.4f}")
+        print(f"R²   = {r2:.4f}")
+
+    print("\n========== Overall Results ==========")
+    print(f"Mean MSE  : {np.mean(mse_scores):.4f}")
+    print(f"Mean RMSE : {np.mean(rmse_scores):.4f}")
+    print(f"Mean R²   : {np.mean(r2_scores):.4f}")
+
+    print(f"\nMSE Variance  : {np.var(mse_scores, ddof=1):.4f}")
+    print(f"RMSE Variance : {np.var(rmse_scores, ddof=1):.4f}")
+    print(f"R² Variance   : {np.var(r2_scores, ddof=1):.4f}")
+#ridge(df)
+#lasso(df)
+random_forest(df,"critical_temp")
